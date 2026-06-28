@@ -399,7 +399,7 @@
 
     filtered.sort((a, b) => {
       const cutoffA = currentTab === 1 ? a.phase1_ranks[activePredictCategory] : a.phase2_ranks[activePredictCategory];
-      const cutoffB = currentTab === 1 ? b.phase2_ranks[activePredictCategory] : b.phase2_ranks[activePredictCategory];
+      const cutoffB = currentTab === 1 ? b.phase1_ranks[activePredictCategory] : b.phase2_ranks[activePredictCategory];
 
       if (sortBy === 'cutoffAsc') return cutoffA - cutoffB;
       if (sortBy === 'cutoffDesc') return cutoffB - cutoffA;
