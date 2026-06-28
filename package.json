@@ -1,0 +1,18 @@
+{
+  "name": "keam-college-predictor",
+  "version": "1.0.0",
+  "description": "A single-page static web application to predict KEAM allotment colleges based on rank and category.",
+  "scripts": {
+    "dev": "npx -y http-server -p 8087",
+    "build": "echo 'No build step required for static project.'"
+  },
+  "keywords": [
+    "keam",
+    "predictor",
+    "college",
+    "kerala",
+    "admissions"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}
