@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": null,
-  "installCommand": null,
-  "outputDirectory": null,
+  "buildCommand": "echo 'Static deployment'",
+  "installCommand": "echo 'No install required'",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
