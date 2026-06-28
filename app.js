@@ -15,6 +15,7 @@
 
   let searchTerm = '';
   let sortBy = 'cutoffAsc';
+  let genderFilter = 'all';
   const typeFilters = {
     G: true,
     N: true,
@@ -45,7 +46,31 @@
     { code: 'KU', name: 'Kudumbi' },
     { code: 'SC', name: 'Scheduled Castes' },
     { code: 'ST', name: 'Scheduled Tribes' },
-    { code: 'EW', name: 'Economically Weaker Section' }
+    { code: 'EW', name: 'Economically Weaker Section' },
+    { code: 'CB', name: 'CB' },
+    { code: 'CC', name: 'CC' },
+    { code: 'DK', name: 'DK' },
+    { code: 'FW', name: 'FW' },
+    { code: 'MG', name: 'MG' },
+    { code: 'MM', name: 'MM' },
+    { code: 'PD', name: 'PD' },
+    { code: 'PI', name: 'PI' },
+    { code: 'PT', name: 'PT' },
+    { code: 'RP', name: 'RP' },
+    { code: 'SD', name: 'SD' },
+    { code: 'XS', name: 'XS' },
+    { code: 'YA', name: 'YA' },
+    { code: 'YB', name: 'YB' },
+    { code: 'YC', name: 'YC' },
+    { code: 'YG', name: 'YG' },
+    { code: 'YH', name: 'YH' },
+    { code: 'YJ', name: 'YJ' },
+    { code: 'YN', name: 'YN' },
+    { code: 'YO', name: 'YO' },
+    { code: 'YP', name: 'YP' },
+    { code: 'YQ', name: 'YQ' },
+    { code: 'YU', name: 'YU' },
+    { code: 'YZ', name: 'YZ' }
   ];
 
   const courseDropdownBtn = document.getElementById('courseDropdownBtn');
@@ -54,6 +79,16 @@
   const courseDropdownList = document.getElementById('courseDropdownList');
   const selectedCourseLabel = document.getElementById('selectedCourseLabel');
   const courseError = document.getElementById('courseError');
+
+  const locationDropdownBtn = document.getElementById('locationDropdownBtn');
+  const locationDropdownPanel = document.getElementById('locationDropdownPanel');
+  const locationDropdownSearch = document.getElementById('locationDropdownSearch');
+  const locationDropdownList = document.getElementById('locationDropdownList');
+  const selectedLocationLabel = document.getElementById('selectedLocationLabel');
+  const locationClearBtn = document.getElementById('locationClearBtn');
+
+  const selectedLocations = new Set();
+  let allLocations = [];
 
   const predictBtn = document.getElementById('predictBtn');
   const loadingState = document.getElementById('loadingState');
@@ -82,6 +117,7 @@
 
   const resultsSearchInput = document.getElementById('resultsSearchInput');
   const sortBySelect = document.getElementById('sortBySelect');
+  const genderSelect = document.getElementById('genderSelect');
 
   const filterTypeGovt = document.getElementById('filterTypeGovt');
   const filterTypeAided = document.getElementById('filterTypeAided');
@@ -209,6 +245,15 @@
 
       populateCourseDropdown(coursesList);
       populateCategoryDropdown(categoriesList);
+
+      const locSet = new Set();
+      for (const course in normalizedData) {
+        normalizedData[course].forEach(col => {
+          locSet.add(getCollegeLocation(col.college));
+        });
+      }
+      allLocations = Array.from(locSet).sort();
+      populateLocationDropdown(allLocations);
       
     } catch (error) {
       console.error('Error loading allotment data:', error);
@@ -256,12 +301,34 @@
     toggleCategoryDropdown();
   });
 
+  let locationDropdownOpen = false;
+
+  function toggleLocationDropdown(show) {
+    locationDropdownOpen = (show !== undefined) ? show : !locationDropdownOpen;
+    if (locationDropdownOpen) {
+      locationDropdownPanel.classList.remove('hidden');
+      locationDropdownSearch.value = '';
+      populateLocationDropdown(allLocations);
+      setTimeout(() => locationDropdownSearch.focus(), 50);
+    } else {
+      locationDropdownPanel.classList.add('hidden');
+    }
+  }
+
+  locationDropdownBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleLocationDropdown();
+  });
+
   document.addEventListener('click', (e) => {
     if (!courseDropdownBtn.contains(e.target) && !courseDropdownPanel.contains(e.target)) {
       toggleCourseDropdown(false);
     }
     if (!categoryDropdownBtn.contains(e.target) && !categoryDropdownPanel.contains(e.target)) {
       toggleCategoryDropdown(false);
+    }
+    if (!locationDropdownBtn.contains(e.target) && !locationDropdownPanel.contains(e.target)) {
+      toggleLocationDropdown(false);
     }
   });
 
@@ -326,6 +393,94 @@
       cat.code.toLowerCase().includes(query) || cat.name.toLowerCase().includes(query)
     );
     populateCategoryDropdown(filtered);
+  });
+
+  function standardizeLocation(loc) {
+    if (!loc) return '';
+    let clean = loc.trim().replace(/\.+$/, '').trim();
+    clean = clean.split(' ').map(w => w.charAt(0).toUpperCase() + w.substring(1).toLowerCase()).join(' ');
+    const mapping = {
+      'Chengannoor': 'Chengannur',
+      'Kozhikkode': 'Kozhikode',
+      'Thirissur': 'Thrissur',
+      'Cochin': 'Kochi'
+    };
+    return mapping[clean] || clean;
+  }
+
+  function getCollegeLocation(collegeName) {
+    if (!collegeName) return 'Unknown';
+    const lastCommaIndex = collegeName.lastIndexOf(',');
+    let loc = '';
+    if (lastCommaIndex !== -1) {
+      loc = collegeName.substring(lastCommaIndex + 1).trim();
+    } else {
+      const words = collegeName.trim().split(/\s+/);
+      loc = words[words.length - 1];
+    }
+    return standardizeLocation(loc);
+  }
+
+  function populateLocationDropdown(locations) {
+    locationDropdownList.innerHTML = '';
+    
+    if (locations.length === 0) {
+      locationDropdownList.innerHTML = `<li class="p-3 text-slate-500 dark:text-slate-400 text-center italic select-none">No locations match</li>`;
+      return;
+    }
+
+    locations.forEach(loc => {
+      const isSelected = selectedLocations.has(loc);
+      const li = document.createElement('li');
+      li.className = "flex items-center justify-between p-3 hover:bg-slate-100 dark:hover:bg-black cursor-pointer text-black dark:text-white transition-colors truncate select-none";
+      li.innerHTML = `
+        <span class="truncate pr-2">${loc.toUpperCase()}</span>
+        <i class="${isSelected ? 'fa-solid fa-circle-check text-[#00ff66]' : 'fa-regular fa-circle text-slate-400 dark:text-slate-600'} text-xs shrink-0"></i>
+      `;
+      
+      li.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (selectedLocations.has(loc)) {
+          selectedLocations.delete(loc);
+        } else {
+          selectedLocations.add(loc);
+        }
+        updateSelectedLocationsLabel();
+        populateLocationDropdown(allLocations.filter(l => l.toLowerCase().includes(locationDropdownSearch.value.trim().toLowerCase())));
+        renderResults();
+      });
+
+      locationDropdownList.appendChild(li);
+    });
+  }
+
+  function updateSelectedLocationsLabel() {
+    if (selectedLocations.size === 0) {
+      selectedLocationLabel.textContent = 'All Locations';
+    } else if (selectedLocations.size === 1) {
+      selectedLocationLabel.textContent = Array.from(selectedLocations)[0].toUpperCase();
+    } else {
+      selectedLocationLabel.textContent = `${selectedLocations.size} SELECTED`;
+    }
+  }
+
+  locationDropdownSearch.addEventListener('input', () => {
+    const query = locationDropdownSearch.value.trim().toLowerCase();
+    const filtered = allLocations.filter(loc => loc.toLowerCase().includes(query));
+    populateLocationDropdown(filtered);
+  });
+
+  locationClearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectedLocations.clear();
+    updateSelectedLocationsLabel();
+    locationDropdownSearch.value = '';
+    populateLocationDropdown(allLocations);
+    renderResults();
+  });
+
+  locationDropdownPanel.addEventListener('click', (e) => {
+    e.stopPropagation();
   });
 
   predictBtn.addEventListener('click', () => {
@@ -472,6 +627,11 @@
     renderResults();
   });
 
+  genderSelect.addEventListener('change', () => {
+    genderFilter = genderSelect.value;
+    renderResults();
+  });
+
   function setupTypeFilter(buttonElement, typeKey) {
     buttonElement.addEventListener('click', () => {
       typeFilters[typeKey] = !typeFilters[typeKey];
@@ -526,6 +686,11 @@
     return cutoffs.length > 0 ? Math.max(...cutoffs) : 999999;
   }
 
+  function isWomensCollege(collegeName) {
+    const lower = collegeName.toLowerCase();
+    return lower.includes('woman') || lower.includes('women') || lower.includes('girls') || lower.includes('ladies');
+  }
+
   function renderResults() {
     cardsContainer.innerHTML = '';
     
@@ -542,6 +707,20 @@
 
     filtered = filtered.filter(college => {
       return typeFilters[college.type] === true;
+    });
+
+    if (selectedLocations.size > 0) {
+      filtered = filtered.filter(college => {
+        const collegeLoc = getCollegeLocation(college.college);
+        return selectedLocations.has(collegeLoc);
+      });
+    }
+
+    filtered = filtered.filter(college => {
+      const isWomen = isWomensCollege(college.college);
+      if (genderFilter === 'coed') return !isWomen;
+      if (genderFilter === 'women') return isWomen;
+      return true;
     });
 
     if (filtered.length === 0) {

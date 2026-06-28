@@ -246,8 +246,8 @@
             </button>
           </div>
           <div class="bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(203,213,224,1)] p-5 space-y-4 rounded-none">
-            <div class="flex flex-col md:flex-row gap-4 items-center">
-              <div class="relative w-full md:flex-1">
+            <div class="flex flex-col lg:flex-row gap-4 items-center">
+              <div class="relative w-full lg:flex-1">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                   <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </div>
@@ -255,29 +255,68 @@
                   class="w-full bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] pl-9 pr-3 py-2 text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] rounded-none"
                   placeholder="FILTER COLLEGES BY NAME OR CODE...">
               </div>
-              <div class="flex items-center space-x-2 w-full md:w-auto">
-                <label for="sortBySelect" class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">Sort By:</label>
-                <select id="sortBySelect" 
-                  class="w-full bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] px-3 py-2 text-xs focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] rounded-none">
-                  <option value="cutoffAsc">Cutoff Rank (Low to High)</option>
-                  <option value="cutoffDesc">Cutoff Rank (High to Low)</option>
-                  <option value="nameAsc">College Name (A to Z)</option>
-                  <option value="codeAsc">College Code (A to Z)</option>
-                </select>
+              <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto items-center">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                  <label for="sortBySelect" class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">Sort By:</label>
+                  <select id="sortBySelect" 
+                    class="w-full sm:w-[190px] bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] px-3 py-2 text-xs focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] rounded-none">
+                    <option value="cutoffAsc">Cutoff Rank (Low to High)</option>
+                    <option value="cutoffDesc">Cutoff Rank (High to Low)</option>
+                    <option value="nameAsc">College Name (A to Z)</option>
+                    <option value="codeAsc">College Code (A to Z)</option>
+                  </select>
+                </div>
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                  <label for="genderSelect" class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap">Category:</label>
+                  <select id="genderSelect" 
+                    class="w-full sm:w-[150px] bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] px-3 py-2 text-xs focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] rounded-none">
+                    <option value="all">Co-Ed & Women's</option>
+                    <option value="coed">Co-Ed Only</option>
+                    <option value="women">Women's Only</option>
+                  </select>
+                </div>
               </div>
             </div>
-            <div class="flex flex-wrap items-center gap-4 pt-2 border-t-2 border-black dark:border-[#3f4452]">
-              <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest">College Type:</span>
-              <div class="flex flex-wrap gap-3">
-                <button type="button" id="filterTypeGovt" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#00ff66] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
-                  <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Government
-                </button>
-                <button type="button" id="filterTypeAided" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#ff9900] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
-                  <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Govt-Aided
-                </button>
-                <button type="button" id="filterTypeSelf" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#00e0ff] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
-                  <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Self-Financing
-                </button>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-2 border-t-2 border-black dark:border-[#3f4452]">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest uppercase">College Type:</span>
+                <div class="flex flex-wrap gap-2.5">
+                  <button type="button" id="filterTypeGovt" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#00ff66] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
+                    <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Government
+                  </button>
+                  <button type="button" id="filterTypeAided" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#ff9900] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
+                    <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Govt-Aided
+                  </button>
+                  <button type="button" id="filterTypeSelf" class="px-3.5 py-1.5 text-xs font-black border-2 border-black dark:border-[#cbd5e0] bg-[#00e0ff] text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(203,213,224,1)] transition-all select-none cursor-pointer flex items-center">
+                    <i class="fa-solid fa-circle-check mr-1.5 text-[10px]"></i> Self-Financing
+                  </button>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2.5 w-full md:w-auto">
+                <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest uppercase whitespace-nowrap">Location:</span>
+                <div class="relative w-full md:w-auto md:min-w-[200px]">
+                  <button type="button" id="locationDropdownBtn" 
+                    class="w-full bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] px-3.5 py-1.5 text-xs focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] font-extrabold rounded-none text-left flex items-center justify-between cursor-pointer uppercase tracking-wider">
+                    <span id="selectedLocationLabel" class="truncate select-none">All Locations</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] shrink-0 ml-2"></i>
+                  </button>
+                  <div id="locationDropdownPanel" 
+                    class="hidden absolute z-30 mt-1.5 w-full md:w-[260px] md:right-0 bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(203,213,224,1)] rounded-none">
+                    <div class="p-2 border-b-2 border-black dark:border-[#cbd5e0] flex items-center justify-between gap-2">
+                      <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+                          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </div>
+                        <input type="text" id="locationDropdownSearch" 
+                          class="w-full bg-slate-50 dark:bg-[#22242d] border border-slate-300 dark:border-[#3f4452] text-black dark:text-[#f3f4f6] pl-8 pr-3 py-1.5 text-[10px] focus:outline-none focus:border-black dark:focus:border-[#cbd5e0] font-semibold rounded-none"
+                          placeholder="SEARCH LOCATION..." autocomplete="off">
+                      </div>
+                      <button type="button" id="locationClearBtn" class="text-[9px] font-black uppercase text-red-500 hover:underline shrink-0">Clear</button>
+                    </div>
+                    <ul id="locationDropdownList" class="max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-[#262626] font-semibold text-xs select-none">
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -310,6 +349,6 @@
       </div>
     </footer>
   </div>
-  <script src="app.js?v=2.4"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>
