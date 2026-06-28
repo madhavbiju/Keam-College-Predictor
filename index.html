@@ -131,25 +131,29 @@
                   Select Category
                 </label>
                 <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500 dark:text-slate-400 z-10">
                     <i class="fa-solid fa-users text-sm"></i>
                   </div>
-                  <select id="categorySelect" name="category" 
-                    class="w-full bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] pl-10 pr-10 py-3 text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] font-semibold rounded-none">
-                    <option value="SM" selected>SM (State Merit)</option>
-                    <option value="EZ">EZ (Ezhava)</option>
-                    <option value="MU">MU (Muslim)</option>
-                    <option value="LA">LA (Latin Catholic / Anglo Indian)</option>
-                    <option value="DV">DV (Dheevara)</option>
-                    <option value="VK">VK (Viswakarma)</option>
-                    <option value="BH">BH (Other Backward Hindu)</option>
-                    <option value="BX">BX (Other Backward Christian)</option>
-                    <option value="KN">KN (Kusavan)</option>
-                    <option value="KU">KU (Kudumbi)</option>
-                    <option value="SC">SC (Scheduled Castes)</option>
-                    <option value="ST">ST (Scheduled Tribes)</option>
-                    <option value="EW">EW (Economically Weaker Section)</option>
-                  </select>
+                  <button type="button" id="categoryDropdownBtn" 
+                    class="w-full bg-white dark:bg-[#22242d] border-2 border-black dark:border-[#3f4452] text-black dark:text-[#f3f4f6] pl-10 pr-10 py-3 text-sm focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(255,107,0,1)] dark:focus:shadow-[4px_4px_0px_0px_rgba(229,254,64,1)] font-semibold rounded-none text-left flex items-center justify-between cursor-pointer">
+                    <span id="selectedCategoryLabel" class="truncate text-black dark:text-white">SM (STATE MERIT)</span>
+                    <i class="fa-solid fa-chevron-down text-xs shrink-0 ml-2"></i>
+                  </button>
+                  <div id="categoryDropdownPanel" 
+                    class="hidden absolute z-30 mt-1.5 w-full bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(203,213,224,1)] rounded-none">
+                    <div class="p-2 border-b-2 border-black dark:border-[#cbd5e0]">
+                      <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+                          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </div>
+                        <input type="text" id="categoryDropdownSearch" 
+                          class="w-full bg-slate-50 dark:bg-[#22242d] border border-slate-300 dark:border-[#3f4452] text-black dark:text-[#f3f4f6] pl-8 pr-3 py-2 text-xs focus:outline-none focus:border-black dark:focus:border-[#cbd5e0] font-semibold rounded-none"
+                          placeholder="SEARCH CATEGORY..." autocomplete="off">
+                      </div>
+                    </div>
+                    <ul id="categoryDropdownList" class="max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-[#262626] font-semibold text-xs">
+                    </ul>
+                  </div>
                 </div>
               </div>
               <div class="relative">
@@ -216,23 +220,30 @@
           </div>
         </div>
         <div id="resultsPanel" class="hidden space-y-6">
-          <div class="bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(203,213,224,1)] p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 rounded-none">
-            <div>
-              <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest block mb-1">Prediction Output</span>
-              <h3 class="text-lg font-black uppercase text-slate-900 dark:text-[#f3f4f6]" id="resultsTitleCourse">-</h3>
-              <p class="text-xs font-bold text-slate-600 dark:text-slate-400 mt-1 tracking-wider" id="resultsTitleDetails">
-                Rank: <strong id="summaryRank" class="text-black dark:text-[#e5fe40] font-black">-</strong> | 
-                Category: <strong id="summaryCategory" class="text-black dark:text-[#e5fe40] font-black">-</strong>
-              </p>
-            </div>
-            <div class="flex border-2 border-black dark:border-[#cbd5e0] p-1 bg-slate-100 dark:bg-[#12141a] self-start md:self-center">
-              <button type="button" id="tabPhase1" class="px-4 py-2.5 text-xs font-black uppercase border-2 border-black dark:border-[#cbd5e0] bg-white dark:bg-[#22242d] text-black dark:text-[#f3f4f6] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(203,213,224,1)] translate-x-[-1px] translate-y-[-1px] rounded-none cursor-pointer transition-all">
-                Phase 1 Allotments <span id="badgePhase1Count" class="ml-1.5 px-2 py-0.5 text-xs bg-black text-white dark:bg-[#cbd5e0] dark:text-black font-extrabold select-none">-</span>
-              </button>
-              <button type="button" id="tabPhase2" class="px-4 py-2.5 text-xs font-black uppercase text-slate-500 dark:text-slate-400 bg-transparent hover:text-black dark:hover:text-[#f3f4f6] rounded-none cursor-pointer border-2 border-transparent transition-all">
-                Phase 2 Allotments <span id="badgePhase2Count" class="ml-1.5 px-2 py-0.5 text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-extrabold select-none">-</span>
-              </button>
-            </div>
+          <div class="bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(203,213,224,1)] p-5 rounded-none">
+            <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 tracking-widest block mb-1">Prediction Output</span>
+            <h3 class="text-lg font-black uppercase text-slate-900 dark:text-[#f3f4f6]" id="resultsTitleCourse">-</h3>
+            <p class="text-xs font-bold text-slate-600 dark:text-slate-400 mt-1 tracking-wider" id="resultsTitleDetails">
+              Rank: <strong id="summaryRank" class="text-black dark:text-[#e5fe40] font-black">-</strong> | 
+              Category: <strong id="summaryCategory" class="text-black dark:text-[#e5fe40] font-black">-</strong>
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 border-2 border-black dark:border-[#cbd5e0] p-1.5 bg-slate-100 dark:bg-[#12141a] rounded-none justify-start sm:justify-center items-center">
+            <button type="button" id="tabCombined" class="px-3.5 py-2 text-xs font-black uppercase border-2 border-black dark:border-[#cbd5e0] bg-white dark:bg-[#22242d] text-black dark:text-[#f3f4f6] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(203,213,224,1)] translate-x-[-1px] translate-y-[-1px] rounded-none cursor-pointer transition-all">
+              Combined Allotments <span id="badgeCombinedCount" class="ml-1.5 px-2 py-0.5 text-xs bg-black text-white dark:bg-[#cbd5e0] dark:text-black font-extrabold select-none">-</span>
+            </button>
+            <button type="button" id="tabPhase1" class="px-3.5 py-2 text-xs font-black uppercase text-slate-500 dark:text-slate-400 bg-transparent hover:text-black dark:hover:text-[#f3f4f6] rounded-none cursor-pointer border-2 border-transparent transition-all">
+              Phase 1 <span id="badgePhase1Count" class="ml-1.5 px-2 py-0.5 text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-extrabold select-none">-</span>
+            </button>
+            <button type="button" id="tabPhase2" class="px-3.5 py-2 text-xs font-black uppercase text-slate-500 dark:text-slate-400 bg-transparent hover:text-black dark:hover:text-[#f3f4f6] rounded-none cursor-pointer border-2 border-transparent transition-all">
+              Phase 2 <span id="badgePhase2Count" class="ml-1.5 px-2 py-0.5 text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-extrabold select-none">-</span>
+            </button>
+            <button type="button" id="tabPhase3" class="px-3.5 py-2 text-xs font-black uppercase text-slate-500 dark:text-slate-400 bg-transparent hover:text-black dark:hover:text-[#f3f4f6] rounded-none cursor-pointer border-2 border-transparent transition-all">
+              Phase 3 <span id="badgePhase3Count" class="ml-1.5 px-2 py-0.5 text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-extrabold select-none">-</span>
+            </button>
+            <button type="button" id="tabStray" class="px-3.5 py-2 text-xs font-black uppercase text-slate-500 dark:text-slate-400 bg-transparent hover:text-black dark:hover:text-[#f3f4f6] rounded-none cursor-pointer border-2 border-transparent transition-all">
+              Stray Entry <span id="badgeStrayCount" class="ml-1.5 px-2 py-0.5 text-xs bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-extrabold select-none">-</span>
+            </button>
           </div>
           <div class="bg-white dark:bg-[#1a1c23] border-2 border-black dark:border-[#cbd5e0] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(203,213,224,1)] p-5 space-y-4 rounded-none">
             <div class="flex flex-col md:flex-row gap-4 items-center">
@@ -299,6 +310,6 @@
       </div>
     </footer>
   </div>
-  <script src="app.js?v=1.9"></script>
+  <script src="app.js?v=2.4"></script>
 </body>
 </html>

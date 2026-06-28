@@ -58,7 +58,9 @@ try {
         college: collegeName,
         type: collegeType,
         phase1_ranks: item.phase1_ranks || {},
-        phase2_ranks: item.phase2_ranks || {}
+        phase2_ranks: item.phase2_ranks || {},
+        phase3_ranks: item.phase3_ranks || {},
+        stray_ranks: item.stray_ranks || {}
       };
     });
   }
@@ -84,15 +86,27 @@ try {
     return cutoff !== undefined && testRank <= cutoff;
   });
   
+  const p3Matches = colleges.filter(c => {
+    const cutoff = c.phase3_ranks[testCategory];
+    return cutoff !== undefined && testRank <= cutoff;
+  });
+  
+  const strayMatches = colleges.filter(c => {
+    const cutoff = c.stray_ranks[testCategory];
+    return cutoff !== undefined && testRank <= cutoff;
+  });
+  
   console.log(`Phase 1 Allotments found: ${p1Matches.length}`);
   console.log(`Phase 2 Allotments found: ${p2Matches.length}`);
+  console.log(`Phase 3 Allotments found: ${p3Matches.length}`);
+  console.log(`Stray Allotments found: ${strayMatches.length}`);
   
   console.log('\nSample matching colleges (Phase 2):');
   p2Matches.slice(0, 5).forEach(c => {
     console.log(`- [${c.code}] ${c.college} | Cutoff: ${c.phase2_ranks[testCategory]} | Type: ${c.type}`);
   });
   
-  if (p2Matches.length > 0) {
+  if (p2Matches.length > 0 || p3Matches.length > 0) {
     console.log('\nPrediction engine tests PASSED successfully.');
   } else {
     throw new Error('Prediction test did not return any colleges. Please double check rank parameters.');
